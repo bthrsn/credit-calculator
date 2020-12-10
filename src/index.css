@@ -1,0 +1,14 @@
+* {
+  margin: 0;
+}
+
+button {
+  outline: none;
+}
+
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-osx-font-smoothing: grayscale;
+}
