@@ -6,10 +6,12 @@ const Buttons = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  width: 35%;
+  width: 37%;
+  min-width: 250px;
+  max-width: 350px;
   
     button {
-      width: 100px;
+      min-width: 100px;
       height: 30px;
       border: none;
       border-radius: .2rem;

@@ -4,15 +4,14 @@ import styled from 'styled-components';
 const RadioButtons = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: row;
-  width: 40%;
   min-width: 250px;
   max-width: 350px;
   margin-top: 1rem;
   
   label {
-    width: 30px;
+    min-width: 30px;
     padding: 3px;
     background-color: #d7d7d7;
     border-radius: .2rem;
@@ -24,13 +23,16 @@ const RadioButtons = styled.div`
           box-shadow: 0 0 1px 0 rgba(8, 11, 14, .06), 
           0 16px 16px -1px rgba(8, 11, 1, .1);    
         }
-        &:checked {
-          background-color: #1790e9;
-        }
+
+        
   }
   
   input {
     display: none;
+    &:checked + label {
+      background-color: #1790e9;
+    }
+
   }
 `;
 

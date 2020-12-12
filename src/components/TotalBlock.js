@@ -30,16 +30,16 @@ const OutputSection = styled.p`
 
 const TotalBlock = () => {
 
-    const [monthlyPayment, setMonthlyPayment] = useState(''),
-          [requiredIncome, setRequiredIncome] = useState(''),
-          [overPayment, setOverPayment] = useState(''),
-          [principal, setPrincipal] = useState('');
+    const [mounthlyPrice] = useState(0),
+          [requiredIncome] = useState(0),
+          [overPayment] = useState(0),
+          [principal] = useState(0);
           
     return (
       <Total>
         <OutputSection>
           Ежемесячный платеж
-          <span>{monthlyPayment} ₽</span>
+          <span>{mounthlyPrice} ₽</span>
         </OutputSection>
         <OutputSection>
           Необходимый доход
