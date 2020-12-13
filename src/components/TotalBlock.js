@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
+import numeral from 'numeral';
 import styled from 'styled-components';
 
 const Total = styled.div`
@@ -6,7 +7,7 @@ const Total = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  max-width: 470px;
+  max-width: 450px;
   margin-top: 1rem;
   background: #ebebeb;
   border-radius: .5rem;
@@ -29,29 +30,24 @@ const OutputSection = styled.p`
 `;
 
 const TotalBlock = () => {
-
-    const [mounthlyPrice] = useState(0),
-          [requiredIncome] = useState(0),
-          [overPayment] = useState(0),
-          [principal] = useState(0);
-          
+         
     return (
       <Total>
         <OutputSection>
           Ежемесячный платеж
-          <span>{mounthlyPrice} ₽</span>
+          <span>{numeral(this.props.monthlyPayment).format('0,0')} ₽</span>
         </OutputSection>
         <OutputSection>
           Необходимый доход
-          <span>{requiredIncome} ₽</span>
+          <span>{numeral(this.props.requiredIncome).format('0,0')} ₽</span>
         </OutputSection>
         <OutputSection>
           Переплата
-          <span>{overPayment} ₽</span>
+          <span>{numeral(this.props.overPayment).format('0,0')} ₽</span>
         </OutputSection>
         <OutputSection>
           Тело кредита
-          <span>{principal} ₽</span>
+          <span>{numeral(this.props.principal).format('0,0')} ₽</span>
         </OutputSection>
       </Total>
     

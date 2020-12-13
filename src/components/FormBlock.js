@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+// import numeral from 'numeral';
+import spriteImg from '../assets/sprites.svg';
 import RadioButtonsBlock from './RadioButtonsBlock';
 import TotalBlock from './TotalBlock';
 import ButtonsBlock from './ButtonsBlock';
@@ -51,6 +53,8 @@ const InputSection = styled.div`
     
     input {
       height: 25px;
+      background-image: url(${spriteImg});
+      background-repeat: no-repeat;
       border: none;
       border-radius: .2rem;
       box-shadow: 0 0 1px 0 rgba(8, 11, 14, .06), 
@@ -77,7 +81,16 @@ const FormBlock = () => {
 const [purchasePrise, setPurchasePrise] = useState(''),
       [loanTerm, setLoanTerm] = useState(''), 
       [downPayment, setDownPayment] = useState(''),
-      [loanApr, setLoanApr] = useState(''); 
+      [loanApr, setLoanApr] = useState(''),
+      [setRequiredIncome] = useState(0),
+      [setMonthlyPayment] = useState(0),
+      [setOverPayment] = useState(0),
+      [setPrincipal] = useState(0);
+      
+// requiredIncome, 
+// monthlyPayment, 
+// overPayment, 
+// principal, 
       
 const setCalculation = () => {
 
@@ -97,24 +110,38 @@ const setCalculation = () => {
 }
 
 const calculateValues = () => {
+
+    // C = W - A, где
+    // C-тело кредита, W-стоимость недвижимости, A-первоначальный взнос 
   let principal = purchasePrise - downPayment,
+  
+      // MI = I / 1200, где
+      // MI - ежемесячная выплата процентов, I-процентная ставка,
       monthlyInterest = loanApr / 1200,
       numberOfPayments = loanTerm * 12,
-      mounthlyPrice = Math.round(principal * (monthlyInterest + monthlyInterest / (Math.pow(1 + monthlyInterest, numberOfPayments) - 1))),
-      overPayment = mounthlyPrice * numberOfPayments - purchasePrise + downPayment,
-      requiredIncome = Math.round(5 * (mounthlyPrice / 3));
       
+      // P = C * (MI + MI / ((1+ MI)^n - 1)), где
+      // P-ежемесячный платеж, C-тело кредита, MI - ежемесячная выплата процентов
+      // n-срок кредитования (в месяцах)
+      monthlyPayment = Math.round(principal * (monthlyInterest + monthlyInterest / (Math.pow(1 + monthlyInterest, numberOfPayments) - 1))),
       
-      // M = P * [ i * (1 + i)^n] / [ (1 + i)^n -1]
-      //  P principal
-      // i monthly interest rate
-      // n number of months required to repay loan
-    // mounthlyPrice = principal * (monthlyInterest+monthlyInterest/((1+ monthlyInterest)^numberofPayments-1))
-    // I = 5 * (P / 3), где I-необходимый доход, P-ежемесячный платеж
-    // L = P * n - W + A, где L-переплата, P-ежемесячный платеж,
-    // n-срок кредитования, W-стоимость недвижимости, A-первоначальный взнос
-
-  console.log(mounthlyPrice, overPayment, requiredIncome, principal);
+      // I = 5 * (P / 3), где 
+      // I-необходимый доход, P-ежемесячный платеж
+      overPayment = monthlyPayment * numberOfPayments - purchasePrise + downPayment,
+      
+      // L = P * n - W + A, где L-переплата, P-ежемесячный платеж,
+      // n-срок кредитования, W-стоимость недвижимости, A-первоначальный взнос
+      requiredIncome = Math.round(5 * (monthlyPayment / 3));
+      
+    setMonthlyPayment(monthlyPayment);
+    setRequiredIncome(requiredIncome);
+    setOverPayment(overPayment);
+    setPrincipal(principal);
+    
+    
+      
+          
+  console.log(monthlyPayment, overPayment, requiredIncome, principal);
 }
 
   // Отображение на странице
@@ -127,7 +154,8 @@ const calculateValues = () => {
           <ErrorBlock>{purchasePrise.error}</ErrorBlock>
           <input 
             onChange={(e) => setPurchasePrise(e.target.value)}
-            onInput={() => setCalculation()}
+            onKeyUp={() => setCalculation()}
+            style={{backgroundPosition: 'left 150% top 95%'}}
             type='text' />
         </InputSection>
         <InputSection>
@@ -135,8 +163,9 @@ const calculateValues = () => {
           <ErrorBlock>{loanTerm.error}</ErrorBlock>
           <input 
             onChange={(e) => setLoanTerm(e.target.value)}
-            onInput={() => setCalculation()}
-            type='text' />
+            onKeyUp={() => setCalculation()}
+            style={{backgroundPosition: 'left 120% top 5%'}}
+            type='text'/>
         </InputSection>
         <InputSection>
           <label>
@@ -145,7 +174,8 @@ const calculateValues = () => {
           <ErrorBlock>{downPayment.error}</ErrorBlock>
           <input
             onChange={(e) => setDownPayment(e.target.value)}
-            onInput={() => setCalculation()}
+            onKeyUp={() => setCalculation()}
+            style={{backgroundPosition: 'left 150% top 95%'}}
             type='text' />
           <RadioButtonsBlock></RadioButtonsBlock>
         </InputSection>
@@ -154,12 +184,21 @@ const calculateValues = () => {
           <ErrorBlock>{loanApr.error}</ErrorBlock>
           <input 
             onChange={(e) => setLoanApr(e.target.value)}
-            onInput={() => setCalculation()}
+            onKeyUp={() => setCalculation()}
+            style={{backgroundPosition: 'left 150% top 50%'}}
             type='text' />
         </InputSection>
       </form>
       <ButtonsBlock />
-      <TotalBlock />
+      <TotalBlock 
+        monthlyPayment = {this.state.monthlyPayment}
+        setMonthlyPayment = {this.state.setMonthlyPayment}
+        requiredIncome = {this.state.requiredIncome}
+        setRequiredIncome = {this.state.setRequiredIncome}
+        overPayment = {this.state.overPayment}
+        setOverPayment = {this.state.setOverPayment}
+        principal = {this.state.principal}
+        setPrincipal = {this.state.setPrincipal}/>
     </Container>
   )
 }

@@ -23,8 +23,6 @@ const RadioButtons = styled.div`
           box-shadow: 0 0 1px 0 rgba(8, 11, 14, .06), 
           0 16px 16px -1px rgba(8, 11, 1, .1);    
         }
-
-        
   }
   
   input {
@@ -32,7 +30,6 @@ const RadioButtons = styled.div`
     &:checked + span {
       background-color: #1790e9;
     }
-
   }
 `;
 
