@@ -10,7 +10,7 @@ const RadioButtons = styled.div`
   max-width: 350px;
   margin-top: 1rem;
   
-  label {
+  span {
     min-width: 30px;
     padding: 3px;
     background-color: #d7d7d7;
@@ -29,7 +29,7 @@ const RadioButtons = styled.div`
   
   input {
     display: none;
-    &:checked + label {
+    &:checked + span {
       background-color: #1790e9;
     }
 
@@ -50,11 +50,11 @@ export default class RadioButtonsBlock extends Component {
     return(
       <RadioButtons
         onChange={this.onChangeValue}>
-          <label><input type="radio" value="10%" name="down-payment" />10%</label>
-          <label><input type="radio" value="15%" name="down-payment"/>15%</label>
-          <label><input type="radio" value="20%" name="down-payment"/>20%</label>
-          <label><input type="radio" value="25%" name="down-payment"/>25%</label>
-          <label><input type="radio" value="30%" name="down-payment"/>30%</label>
+          <label><input type="radio" value="10%" name="down-payment" /><span>10%</span></label>
+          <label><input type="radio" value="15%" name="down-payment"/><span>15%</span></label>
+          <label><input type="radio" value="20%" name="down-payment"/><span>20%</span></label>
+          <label><input type="radio" value="25%" name="down-payment"/><span>25%</span></label>
+          <label><input type="radio" value="30%" name="down-payment"/><span>30%</span></label>
       </RadioButtons>
     )
   }
