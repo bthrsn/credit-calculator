@@ -29,7 +29,7 @@ const OutputSection = styled.p`
   }  
 `;
 
-const TotalBlock = () => {
+const TotalBlock = (monthlyPayment, requiredIncome, overPayment, principal) => {
          
     return (
       <Total>

@@ -149,7 +149,7 @@ const calculateValues = () => {
       
       // I = 5 * (P / 3), где 
       // I-необходимый доход, P-ежемесячный платеж
-      overPayment = monthlyPayment * numberOfPayments - purchasePrice + downPayment,
+      overPayment = Math.round(monthlyPayment * numberOfPayments - purchasePrice + downPayment),
       
       // L = P * n - W + A, где L-переплата, P-ежемесячный платеж,
       // n-срок кредитования, W-стоимость недвижимости, A-первоначальный взнос

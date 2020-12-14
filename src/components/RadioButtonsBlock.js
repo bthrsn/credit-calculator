@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const RadioButtons = styled.div`
@@ -33,26 +33,40 @@ const RadioButtons = styled.div`
   }
 `;
 
-export default class RadioButtonsBlock extends Component {
-
-  state = {
-    name: 'React'
+ const RadioButtonsBlock  = (purchasePrice) => {
+  
+  const onChangeValue = (e) => {
+  
+    // console.log(e.target.value);
+    const target = e.target.value;
+    const downPayment = purchasePrice * target / 100;
+    
+    return downPayment
   }
   
-  onChangeValue = (e) => {
-    console.log(e.target.value);
-  }
-  
-  render() {
-    return(
-      <RadioButtons
-        onChange={this.onChangeValue}>
-          <label><input type="radio" value="10%" name="down-payment" /><span>10%</span></label>
-          <label><input type="radio" value="15%" name="down-payment"/><span>15%</span></label>
-          <label><input type="radio" value="20%" name="down-payment"/><span>20%</span></label>
-          <label><input type="radio" value="25%" name="down-payment"/><span>25%</span></label>
-          <label><input type="radio" value="30%" name="down-payment"/><span>30%</span></label>
-      </RadioButtons>
-    )
-  }
+  return(
+    <RadioButtons
+      onChange={onChangeValue}>
+        <label>
+          <input type="radio" value="10%" name="down-payment" />
+          <span>10%</span>
+        </label>
+        <label>
+          <input type="radio" value="15%" name="down-payment"/>
+          <span>15%</span></label>
+        <label>
+          <input type="radio" value="20%" name="down-payment"/>
+          <span>20%</span></label>
+        <label>
+          <input type="radio" value="25%" name="down-payment"/>
+          <span>25%</span>
+        </label>
+        <label>
+          <input type="radio" value="30%" name="down-payment"/>
+          <span>30%</span>
+        </label>
+    </RadioButtons>
+  )
 }
+
+export default RadioButtonsBlock;
