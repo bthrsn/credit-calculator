@@ -35,19 +35,19 @@ const TotalBlock = () => {
       <Total>
         <OutputSection>
           Ежемесячный платеж
-          <span>{numeral(this.props.monthlyPayment).format('0,0')} ₽</span>
+          <span>{numeral(monthlyPayment).format('0,0')} ₽</span>
         </OutputSection>
         <OutputSection>
           Необходимый доход
-          <span>{numeral(this.props.requiredIncome).format('0,0')} ₽</span>
+          <span>{numeral(requiredIncome).format('0,0')} ₽</span>
         </OutputSection>
         <OutputSection>
           Переплата
-          <span>{numeral(this.props.overPayment).format('0,0')} ₽</span>
+          <span>{numeral(overPayment).format('0,0')} ₽</span>
         </OutputSection>
         <OutputSection>
           Тело кредита
-          <span>{numeral(this.props.principal).format('0,0')} ₽</span>
+          <span>{numeral(principal).format('0,0')} ₽</span>
         </OutputSection>
       </Total>
     

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-// import numeral from 'numeral';
 import spriteImg from '../assets/sprites.svg';
 import RadioButtonsBlock from './RadioButtonsBlock';
-import TotalBlock from './TotalBlock';
 import ButtonsBlock from './ButtonsBlock';
 import validateField from '../services/validateField';
 
@@ -74,28 +72,52 @@ const ErrorBlock = styled.span`
   color: red;
 `;
 
+const Total = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 450px;
+  margin-top: 1rem;
+  background: #ebebeb;
+  border-radius: .5rem;
+  box-shadow: 0 0 1px 0 rgba(8, 11, 14, .06), 
+    0 6px 6px -1px rgba(8, 11, 1, .1);
+`;
+
+const OutputSection = styled.p`
+  width: 35%;
+  min-width: 180px;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  
+  span {
+    font-size: 25px;
+    font-weight: 500; 
+  }  
+`;
+
 
 const FormBlock = () => {
 
 // Расчеты
-const [purchasePrise, setPurchasePrise] = useState(''),
+const [purchasePrice, setPurchasePrice] = useState(''),
       [loanTerm, setLoanTerm] = useState(''), 
       [downPayment, setDownPayment] = useState(''),
       [loanApr, setLoanApr] = useState(''),
-      [setRequiredIncome] = useState(0),
-      [setMonthlyPayment] = useState(0),
-      [setOverPayment] = useState(0),
-      [setPrincipal] = useState(0);
+      [requiredIncome, setRequiredIncome] = useState(0),
+      [monthlyPayment, setMonthlyPayment] = useState(0),
+      [overPayment, setOverPayment] = useState(0),
+      [principal, setPrincipal] = useState(0);
       
-// requiredIncome, 
-// monthlyPayment, 
-// overPayment, 
-// principal, 
+
       
 const setCalculation = () => {
 
     // В поле можно вводить только цифры
-    const validatedPrice = validateField(purchasePrise, setPurchasePrise),
+    const validatedPrice = validateField(purchasePrice, setPurchasePrice),
          validatedPayment = validateField(loanTerm, setLoanTerm),
          validatedLoanTerm = validateField(downPayment, setDownPayment),
          validatedLoanApr = validateField(loanApr, setLoanApr);
@@ -113,7 +135,7 @@ const calculateValues = () => {
 
     // C = W - A, где
     // C-тело кредита, W-стоимость недвижимости, A-первоначальный взнос 
-  let principal = purchasePrise - downPayment,
+  let principal = purchasePrice - downPayment,
   
       // MI = I / 1200, где
       // MI - ежемесячная выплата процентов, I-процентная ставка,
@@ -127,7 +149,7 @@ const calculateValues = () => {
       
       // I = 5 * (P / 3), где 
       // I-необходимый доход, P-ежемесячный платеж
-      overPayment = monthlyPayment * numberOfPayments - purchasePrise + downPayment,
+      overPayment = monthlyPayment * numberOfPayments - purchasePrice + downPayment,
       
       // L = P * n - W + A, где L-переплата, P-ежемесячный платеж,
       // n-срок кредитования, W-стоимость недвижимости, A-первоначальный взнос
@@ -138,9 +160,6 @@ const calculateValues = () => {
     setOverPayment(overPayment);
     setPrincipal(principal);
     
-    
-      
-          
   console.log(monthlyPayment, overPayment, requiredIncome, principal);
 }
 
@@ -151,9 +170,9 @@ const calculateValues = () => {
       <form>
         <InputSection>
           <label>Стоимость недвижимости</label>
-          <ErrorBlock>{purchasePrise.error}</ErrorBlock>
+          <ErrorBlock>{purchasePrice.error}</ErrorBlock>
           <input 
-            onChange={(e) => setPurchasePrise(e.target.value)}
+            onChange={(e) => setPurchasePrice(e.target.value)}
             onKeyUp={() => setCalculation()}
             style={{backgroundPosition: 'left 150% top 95%'}}
             type='text' />
@@ -190,15 +209,24 @@ const calculateValues = () => {
         </InputSection>
       </form>
       <ButtonsBlock />
-      <TotalBlock 
-        monthlyPayment = {this.state.monthlyPayment}
-        setMonthlyPayment = {this.state.setMonthlyPayment}
-        requiredIncome = {this.state.requiredIncome}
-        setRequiredIncome = {this.state.setRequiredIncome}
-        overPayment = {this.state.overPayment}
-        setOverPayment = {this.state.setOverPayment}
-        principal = {this.state.principal}
-        setPrincipal = {this.state.setPrincipal}/>
+      <Total>
+        <OutputSection>
+          Ежемесячный платеж
+          <span>{(monthlyPayment).toLocaleString('ru')} ₽</span>
+        </OutputSection>
+        <OutputSection>
+          Необходимый доход
+          <span>{(requiredIncome).toLocaleString('ru')} ₽</span>
+        </OutputSection>
+        <OutputSection>
+          Переплата
+          <span>{(overPayment).toLocaleString('ru')} ₽</span>
+        </OutputSection>
+        <OutputSection>
+          Тело кредита
+          <span>{(principal).toLocaleString('ru')} ₽</span>
+        </OutputSection>
+      </Total>
     </Container>
   )
 }
