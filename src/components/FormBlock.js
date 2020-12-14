@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import spriteImg from '../assets/sprites.svg';
 import RadioButtonsBlock from './RadioButtonsBlock';
 import ButtonsBlock from './ButtonsBlock';
 import validateField from '../services/validateField';
+import TotalBlock from './TotalBlock';
 
 // Стили
 const Container = styled.div`
@@ -72,45 +73,46 @@ const ErrorBlock = styled.span`
   color: red;
 `;
 
-const Total = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  max-width: 450px;
-  margin-top: 1rem;
-  background: #ebebeb;
-  border-radius: .5rem;
-  box-shadow: 0 0 1px 0 rgba(8, 11, 14, .06), 
-    0 6px 6px -1px rgba(8, 11, 1, .1);
-`;
+// const Total = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   flex-wrap: wrap;
+//   max-width: 450px;
+//   margin-top: 1rem;
+//   background: #ebebeb;
+//   border-radius: .5rem;
+//   box-shadow: 0 0 1px 0 rgba(8, 11, 14, .06), 
+//     0 6px 6px -1px rgba(8, 11, 1, .1);
+// `;
 
-const OutputSection = styled.p`
-  width: 35%;
-  min-width: 180px;
-  max-width: 250px;
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
+// const OutputSection = styled.p`
+//   width: 35%;
+//   min-width: 180px;
+//   max-width: 250px;
+//   display: flex;
+//   flex-direction: column;
+//   padding: 1rem;
   
-  span {
-    font-size: 25px;
-    font-weight: 500; 
-  }  
-`;
+//   span {
+//     font-size: 25px;
+//     font-weight: 500; 
+//   }  
+// `;
 
 
-const FormBlock = () => {
+export default function FormBlock() {
 
 // Расчеты
 const [purchasePrice, setPurchasePrice] = useState(''),
       [loanTerm, setLoanTerm] = useState(''), 
       [downPayment, setDownPayment] = useState(''),
       [loanApr, setLoanApr] = useState(''),
-      [requiredIncome, setRequiredIncome] = useState(0),
-      [monthlyPayment, setMonthlyPayment] = useState(0),
-      [overPayment, setOverPayment] = useState(0),
-      [principal, setPrincipal] = useState(0);
+      // Для корректного получения данных из localStorage, состояние берем также из localStorage
+      [monthlyPayment, setMonthlyPayment] = useState(localStorage.getItem('monthlyPayment')),
+      [requiredIncome, setRequiredIncome] = useState(localStorage.getItem('requiredIncome')),
+      [overPayment, setOverPayment] = useState(localStorage.getItem('overPayment')),
+      [principal, setPrincipal] = useState(localStorage.getItem('principal'));
       
 
       
@@ -131,26 +133,26 @@ const setCalculation = () => {
       }
 }
 
-const calculateValues = () => {
+  const calculateValues = () => {
 
     // C = W - A, где
     // C-тело кредита, W-стоимость недвижимости, A-первоначальный взнос 
-  let principal = purchasePrice - downPayment,
+    let principal = purchasePrice - downPayment,
   
       // MI = I / 1200, где
       // MI - ежемесячная выплата процентов, I-процентная ставка,
       monthlyInterest = loanApr / 1200,
       numberOfPayments = loanTerm * 12,
-      
+        
       // P = C * (MI + MI / ((1+ MI)^n - 1)), где
       // P-ежемесячный платеж, C-тело кредита, MI - ежемесячная выплата процентов
       // n-срок кредитования (в месяцах)
       monthlyPayment = Math.round(principal * (monthlyInterest + monthlyInterest / (Math.pow(1 + monthlyInterest, numberOfPayments) - 1))),
-      
+        
       // I = 5 * (P / 3), где 
       // I-необходимый доход, P-ежемесячный платеж
       overPayment = Math.round(monthlyPayment * numberOfPayments - purchasePrice + downPayment),
-      
+        
       // L = P * n - W + A, где L-переплата, P-ежемесячный платеж,
       // n-срок кредитования, W-стоимость недвижимости, A-первоначальный взнос
       requiredIncome = Math.round(5 * (monthlyPayment / 3));
@@ -160,8 +162,15 @@ const calculateValues = () => {
     setOverPayment(overPayment);
     setPrincipal(principal);
     
-  console.log(monthlyPayment, overPayment, requiredIncome, principal);
-}
+    console.log(monthlyPayment, requiredIncome, overPayment, principal);
+    
+  }
+  
+  // Сохранение элементов в localStorage
+  useEffect(() => {localStorage.setItem('monthlyPayment', JSON.stringify(monthlyPayment))}, [monthlyPayment])
+  useEffect(() => {localStorage.setItem('requiredIncome', JSON.stringify(requiredIncome))}, [requiredIncome])
+  useEffect(() => {localStorage.setItem('overPayment', JSON.stringify(overPayment))}, [overPayment])
+  useEffect(() => {localStorage.setItem('principal', JSON.stringify(principal))}, [principal])
 
   // Отображение на странице
   return(
@@ -209,7 +218,13 @@ const calculateValues = () => {
         </InputSection>
       </form>
       <ButtonsBlock />
-      <Total>
+      <TotalBlock 
+        requiredIncome = {requiredIncome}
+        monthlyPayment = {monthlyPayment}
+        overPayment = {overPayment}
+        principal = {principal}
+      />
+      {/* <Total>
         <OutputSection>
           Ежемесячный платеж
           <span>{(monthlyPayment).toLocaleString('ru')} ₽</span>
@@ -226,10 +241,9 @@ const calculateValues = () => {
           Тело кредита
           <span>{(principal).toLocaleString('ru')} ₽</span>
         </OutputSection>
-      </Total>
+      </Total> */}
     </Container>
   )
 }
 
-export default FormBlock;
   

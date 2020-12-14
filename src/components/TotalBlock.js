@@ -30,7 +30,8 @@ const OutputSection = styled.p`
 `;
 
 const TotalBlock = (monthlyPayment, requiredIncome, overPayment, principal) => {
-         
+    // const {monthlyPayment, requiredIncome, overPayment, principal} = this.props; 
+    
     return (
       <Total>
         <OutputSection>
