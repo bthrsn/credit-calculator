@@ -85,7 +85,6 @@ const [purchasePrice, setPurchasePrice] = useState(''),
       [loanTerm, setLoanTerm] = useState(''), 
       [downPayment, setDownPayment] = useState(''),
       [loanApr, setLoanApr] = useState(''),
-      // Для корректного получения данных из localStorage, состояние берем также из localStorage
       [monthlyPayment, setMonthlyPayment] = useState(0),
       [requiredIncome, setRequiredIncome] = useState(0),
       [overPayment, setOverPayment] = useState(0),
@@ -128,9 +127,9 @@ const [purchasePrice, setPurchasePrice] = useState(''),
       // n-срок кредитования (в месяцах)
       monthlyPayment = Math.round(principal * (monthlyInterest + monthlyInterest / (Math.pow(1 + monthlyInterest, numberOfPayments) - 1))),
         
-      // L = P * n - W + A, где L-переплата, P-ежемесячный платеж,
-      // n-срок кредитования, W-стоимость недвижимости, A-первоначальный взнос
-      overPayment = Math.round(monthlyPayment * numberOfPayments - purchasePrice + downPayment),
+      // L = P * n - C, где L-переплата, P-ежемесячный платеж,
+      // n-срок кредитования, C-тело кредита
+      overPayment = Math.round(monthlyPayment * numberOfPayments - principal),
       
       // I = 5 * (P / 3), где 
       // I-необходимый доход, P-ежемесячный платеж
@@ -142,15 +141,15 @@ const [purchasePrice, setPurchasePrice] = useState(''),
     setPrincipal(principal);    
   }
   
-  // Переключение процентов в первоначальном взносе 
-  const onChangeValue = (e) => {
+  // // Переключение процентов в первоначальном взносе 
+  // const onChangeValue = (e) => {
   
-    console.log(e.target.value);
-    const target = e.target.value;
-    const downPayment = purchasePrice * target / 100;
+  //   console.log(e.target.value);
+  //   const target = e.target.value;
+  //   const downPayment = purchasePrice * target / 100;
     
-    setDownPayment(downPayment);
-  }
+  //   setDownPayment(downPayment);
+  // }
   
   // // Сохранение элементов в localStorage
   // useEffect(() => {localStorage.setItem('purchasePrice', JSON.stringify(purchasePrice))}, [purchasePrice])
@@ -162,7 +161,6 @@ const [purchasePrice, setPurchasePrice] = useState(''),
   // useEffect(() => {localStorage.setItem('requiredIncome', JSON.stringify(requiredIncome))}, [requiredIncome])
   // useEffect(() => {localStorage.setItem('overPayment', JSON.stringify(overPayment))}, [overPayment])
   // useEffect(() => {localStorage.setItem('principal', JSON.stringify(principal))}, [principal])
-  
   
   // Переключение локали отображения чисел на русский язык и ф
   numeral.locale('ru');
@@ -178,7 +176,7 @@ const [purchasePrice, setPurchasePrice] = useState(''),
   // Отображение на странице
   return(
   <Context.Provider value={{
-    onChangeValue,
+    // onChangeValue,
     monthlyPayment,
     requiredIncome,
     overPayment,
