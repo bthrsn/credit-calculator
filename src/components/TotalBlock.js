@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import numeral from 'numeral';
 import styled from 'styled-components';
+import {Context} from '../services/context';
 
 const Total = styled.div`
   display: flex;
@@ -29,8 +30,8 @@ const OutputSection = styled.p`
   }  
 `;
 
-const TotalBlock = (monthlyPayment, requiredIncome, overPayment, principal) => {
-    // const {monthlyPayment, requiredIncome, overPayment, principal} = this.props; 
+const TotalBlock = () => {
+    const {monthlyPayment, requiredIncome, overPayment, principal} = useContext(Context); 
     
     return (
       <Total>

@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import spriteImg from '../assets/sprites.svg';
 import RadioButtonsBlock from './RadioButtonsBlock';
 import ButtonsBlock from './ButtonsBlock';
-import validateField from '../services/validateField';
 import TotalBlock from './TotalBlock';
+import validateField from '../services/validateField';
+import {Context} from '../services/context';
 
 // Стили
 const Container = styled.div`
@@ -116,22 +117,22 @@ const [purchasePrice, setPurchasePrice] = useState(''),
       
 
       
-const setCalculation = () => {
-
-    // В поле можно вводить только цифры
-    const validatedPrice = validateField(purchasePrice, setPurchasePrice),
-         validatedPayment = validateField(loanTerm, setLoanTerm),
-         validatedLoanTerm = validateField(downPayment, setDownPayment),
-         validatedLoanApr = validateField(loanApr, setLoanApr);
-     
-    //  Условия расчета
-    if (validatedPrice &&
-      validatedPayment &&
-      validatedLoanTerm &&
-      validatedLoanApr) {
-        calculateValues();
-      }
-}
+  const setCalculation = async () => {
+  
+      // В поле можно вводить только цифры
+      const validatedPrice = await validateField(purchasePrice, setPurchasePrice),
+           validatedPayment = await validateField(loanTerm, setLoanTerm),
+           validatedLoanTerm = await validateField(downPayment, setDownPayment),
+           validatedLoanApr = await validateField(loanApr, setLoanApr);
+       
+      //  Условия расчета
+      if (validatedPrice &&
+        validatedPayment &&
+        validatedLoanTerm &&
+        validatedLoanApr) {
+          calculateValues();
+        }
+  }
 
   const calculateValues = () => {
 
@@ -166,7 +167,22 @@ const setCalculation = () => {
     
   }
   
+  // Переключение процентов в первоначальном взносе 
+  const onChangeValue = (e) => {
+  
+    console.log(e.target.value);
+    const target = e.target.value;
+    const downPayment = purchasePrice * target / 100;
+    
+    setDownPayment(downPayment);
+  }
+  
   // Сохранение элементов в localStorage
+  useEffect(() => {localStorage.setItem('purchasePrice', JSON.stringify(purchasePrice))}, [purchasePrice])
+  useEffect(() => {localStorage.setItem('loanTerm', JSON.stringify(loanTerm))}, [loanTerm])
+  useEffect(() => {localStorage.setItem('downPayment', JSON.stringify(downPayment))}, [downPayment])
+  useEffect(() => {localStorage.setItem('loanApr', JSON.stringify(loanApr))}, [loanApr])
+
   useEffect(() => {localStorage.setItem('monthlyPayment', JSON.stringify(monthlyPayment))}, [monthlyPayment])
   useEffect(() => {localStorage.setItem('requiredIncome', JSON.stringify(requiredIncome))}, [requiredIncome])
   useEffect(() => {localStorage.setItem('overPayment', JSON.stringify(overPayment))}, [overPayment])
@@ -174,6 +190,13 @@ const setCalculation = () => {
 
   // Отображение на странице
   return(
+  <Context.Provider value={{
+    onChangeValue,
+    monthlyPayment,
+    requiredIncome,
+    overPayment,
+    principal,
+  }}>
     <Container>
       <h1>Ипотечный калькулятор</h1>
       <form>
@@ -205,7 +228,8 @@ const setCalculation = () => {
             onKeyUp={() => setCalculation()}
             style={{backgroundPosition: 'left 150% top 95%'}}
             type='text' />
-          <RadioButtonsBlock></RadioButtonsBlock>
+          <RadioButtonsBlock>
+          </RadioButtonsBlock>
         </InputSection>
         <InputSection>
           <label>Процентная ставка</label>
@@ -219,10 +243,10 @@ const setCalculation = () => {
       </form>
       <ButtonsBlock />
       <TotalBlock 
-        requiredIncome = {requiredIncome}
-        monthlyPayment = {monthlyPayment}
-        overPayment = {overPayment}
-        principal = {principal}
+        // requiredIncome = {requiredIncome}
+        // monthlyPayment = {monthlyPayment}
+        // overPayment = {overPayment}
+        // principal = {principal}
       />
       {/* <Total>
         <OutputSection>
@@ -243,6 +267,7 @@ const setCalculation = () => {
         </OutputSection>
       </Total> */}
     </Container>
+    </Context.Provider>
   )
 }
 

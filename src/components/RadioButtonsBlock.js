@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
+import {Context} from '../services/context';
 
 const RadioButtons = styled.div`
   display: flex;
@@ -33,20 +34,14 @@ const RadioButtons = styled.div`
   }
 `;
 
- const RadioButtonsBlock  = (purchasePrice) => {
-  
-  const onChangeValue = (e) => {
-  
-    // console.log(e.target.value);
-    const target = e.target.value;
-    const downPayment = purchasePrice * target / 100;
-    
-    return downPayment
-  }
-  
+ const RadioButtonsBlock  = () => {
+ 
+ const {onChangeValue} = useContext(Context);
+ 
   return(
     <RadioButtons
-      onChange={onChangeValue}>
+      onChange={onChangeValue}
+      >
         <label>
           <input type="radio" value="10%" name="down-payment" />
           <span>10%</span>
