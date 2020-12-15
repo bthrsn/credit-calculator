@@ -1,6 +1,6 @@
-import React, { useState} from 'react';
-// import numeral from 'numeral';
-// import 'numeral/locales/ru';
+import React, { useState } from 'react';
+import numeral from 'numeral';
+import 'numeral/locales/ru';
 import styled from 'styled-components';
 import spriteImg from '../assets/sprites.svg';
 import RadioButtonsBlock from './RadioButtonsBlock';
@@ -76,34 +76,6 @@ const ErrorBlock = styled.span`
   color: red;
 `;
 
-// const Total = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   flex-wrap: wrap;
-//   max-width: 450px;
-//   margin-top: 1rem;
-//   background: #ebebeb;
-//   border-radius: .5rem;
-//   box-shadow: 0 0 1px 0 rgba(8, 11, 14, .06), 
-//     0 6px 6px -1px rgba(8, 11, 1, .1);
-// `;
-
-// const OutputSection = styled.p`
-//   width: 35%;
-//   min-width: 180px;
-//   max-width: 250px;
-//   display: flex;
-//   flex-direction: column;
-//   padding: 1rem;
-  
-//   span {
-//     font-size: 25px;
-//     font-weight: 500; 
-//   }  
-// `;
-
-
 export default function FormBlock() {
 
 // Расчеты
@@ -122,10 +94,10 @@ const [purchasePrice, setPurchasePrice] = useState(''),
   const setCalculation = async () => {
   
       // В поле можно вводить только цифры
-      const validatedPrice = validateField(purchasePrice, setPurchasePrice),
-           validatedPayment = validateField(loanTerm, setLoanTerm),
-           validatedLoanTerm = validateField(downPayment, setDownPayment),
-           validatedLoanApr = validateField(loanApr, setLoanApr);
+      const validatedPrice = await validateField(purchasePrice, setPurchasePrice),
+           validatedPayment = await validateField(loanTerm, setLoanTerm),
+           validatedLoanTerm = await validateField(downPayment, setDownPayment),
+           validatedLoanApr = await validateField(loanApr, setLoanApr);
        
       //  Условия расчета
       if (validatedPrice &&
@@ -135,9 +107,10 @@ const [purchasePrice, setPurchasePrice] = useState(''),
           calculateValues();
         }
   }
+  
 
   const calculateValues = () => {
-
+  
     // C = W - A, где
     // C-тело кредита, W-стоимость недвижимости, A-первоначальный взнос 
     let principal = purchasePrice - downPayment,
@@ -165,10 +138,7 @@ const [purchasePrice, setPurchasePrice] = useState(''),
     setMonthlyPayment(monthlyPayment);
     setRequiredIncome(requiredIncome);
     setOverPayment(overPayment);
-    setPrincipal(principal);
-    
-    console.log(monthlyPayment, requiredIncome, overPayment, principal);
-    
+    setPrincipal(principal);    
   }
   
   // Переключение процентов в первоначальном взносе 
@@ -191,6 +161,12 @@ const [purchasePrice, setPurchasePrice] = useState(''),
   // useEffect(() => {localStorage.setItem('requiredIncome', JSON.stringify(requiredIncome))}, [requiredIncome])
   // useEffect(() => {localStorage.setItem('overPayment', JSON.stringify(overPayment))}, [overPayment])
   // useEffect(() => {localStorage.setItem('principal', JSON.stringify(principal))}, [principal])
+  
+  // Переключение локали отображения чисел на русский язык и функция для добавления пробелов между разрядами
+  numeral.locale('ru');
+  const normalizeValue = (value) => {
+    return numeral(value).format('0,0');
+  }
 
   // Отображение на странице
   return(
@@ -208,7 +184,12 @@ const [purchasePrice, setPurchasePrice] = useState(''),
           <label>Стоимость недвижимости</label>
           <ErrorBlock>{purchasePrice.error}</ErrorBlock>
           <input 
-            onChange={(e) => setPurchasePrice(e.target.value)}
+            onChange={(e) => {
+              const {value} = e.target;
+              e.target.value = normalizeValue(value);
+              setPurchasePrice(value);
+              }
+            }
             onKeyUp={() => setCalculation()}
             style={{backgroundPosition: 'left 150% top 95%'}}
             type='text' />
@@ -228,7 +209,12 @@ const [purchasePrice, setPurchasePrice] = useState(''),
           </label>
           <ErrorBlock>{downPayment.error}</ErrorBlock>
           <input
-            onChange={(e) => setDownPayment(e.target.value)}
+            onChange={(e) => {
+              const {value} = e.target;
+              setDownPayment(value);
+              e.target.value = normalizeValue(value);
+              }
+            }
             onKeyUp={() => setCalculation()}
             style={{backgroundPosition: 'left 150% top 95%'}}
             type='text' />
@@ -246,30 +232,7 @@ const [purchasePrice, setPurchasePrice] = useState(''),
         </InputSection>
       </form>
       <ButtonsBlock />
-      <TotalBlock 
-        // requiredIncome = {requiredIncome}
-        // monthlyPayment = {monthlyPayment}
-        // overPayment = {overPayment}
-        // principal = {principal}
-      />
-      {/* <Total>
-        <OutputSection>
-          Ежемесячный платеж
-          <span>{(monthlyPayment).toLocaleString('ru')} ₽</span>
-        </OutputSection>
-        <OutputSection>
-          Необходимый доход
-          <span>{(requiredIncome).toLocaleString('ru')} ₽</span>
-        </OutputSection>
-        <OutputSection>
-          Переплата
-          <span>{(overPayment).toLocaleString('ru')} ₽</span>
-        </OutputSection>
-        <OutputSection>
-          Тело кредита
-          <span>{(principal).toLocaleString('ru')} ₽</span>
-        </OutputSection>
-      </Total> */}
+      <TotalBlock />
     </Container>
     </Context.Provider>
   )
