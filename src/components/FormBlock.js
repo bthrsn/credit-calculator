@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import numeral from 'numeral';
 import 'numeral/locales/ru';
-import styled from 'styled-components';
-import spriteImg from '../assets/sprites.svg';
+import validateField from '../services/validateField';
+import {Context} from '../services/context';
+
 import RadioButtonsBlock from './RadioButtonsBlock';
 import ButtonsBlock from './ButtonsBlock';
 import TotalBlock from './TotalBlock';
-import validateField from '../services/validateField';
-import {Context} from '../services/context';
+
+import styled from 'styled-components';
+import spriteImg from '../assets/sprites.svg';
 
 // Стили
 const Container = styled.div`
@@ -89,15 +91,14 @@ const [purchasePrice, setPurchasePrice] = useState(''),
       [overPayment, setOverPayment] = useState(0),
       [principal, setPrincipal] = useState(0);
       
-
       
   const setCalculation = async () => {
   
       // В поле можно вводить только цифры
-      const validatedPrice = await validateField(purchasePrice, setPurchasePrice),
-           validatedPayment = await validateField(loanTerm, setLoanTerm),
-           validatedLoanTerm = await validateField(downPayment, setDownPayment),
-           validatedLoanApr = await validateField(loanApr, setLoanApr);
+      const validatedPrice = validateField(purchasePrice, setPurchasePrice),
+           validatedPayment = validateField(loanTerm, setLoanTerm),
+           validatedLoanTerm = validateField(downPayment, setDownPayment),
+           validatedLoanApr = validateField(loanApr, setLoanApr);
        
       //  Условия расчета
       if (validatedPrice &&
@@ -109,8 +110,8 @@ const [purchasePrice, setPurchasePrice] = useState(''),
   }
   
 
-  const calculateValues = () => {
-  
+  function  calculateValues() {
+    
     // C = W - A, где
     // C-тело кредита, W-стоимость недвижимости, A-первоначальный взнос 
     let principal = purchasePrice - downPayment,
@@ -162,10 +163,16 @@ const [purchasePrice, setPurchasePrice] = useState(''),
   // useEffect(() => {localStorage.setItem('overPayment', JSON.stringify(overPayment))}, [overPayment])
   // useEffect(() => {localStorage.setItem('principal', JSON.stringify(principal))}, [principal])
   
-  // Переключение локали отображения чисел на русский язык и функция для добавления пробелов между разрядами
+  
+  // Переключение локали отображения чисел на русский язык и ф
   numeral.locale('ru');
-  const normalizeValue = (value) => {
+  // Добавления пробелов между разрядами
+  const addSpacesToValue = (value) => {
     return numeral(value).format('0,0');
+  }
+  // Удаление проблеов между разрядами для подсчета
+  const removeSpacesInValue = (value) => {
+    return value.replace(/\D/g, '');
   }
 
   // Отображение на странице
@@ -186,8 +193,8 @@ const [purchasePrice, setPurchasePrice] = useState(''),
           <input 
             onChange={(e) => {
               const {value} = e.target;
-              e.target.value = normalizeValue(value);
-              setPurchasePrice(value);
+              e.target.value = addSpacesToValue(value);
+              setPurchasePrice(removeSpacesInValue(value));
               }
             }
             onKeyUp={() => setCalculation()}
@@ -211,8 +218,8 @@ const [purchasePrice, setPurchasePrice] = useState(''),
           <input
             onChange={(e) => {
               const {value} = e.target;
-              setDownPayment(value);
-              e.target.value = normalizeValue(value);
+              setDownPayment(removeSpacesInValue(value));
+              e.target.value = addSpacesToValue(value);
               }
             }
             onKeyUp={() => setCalculation()}
