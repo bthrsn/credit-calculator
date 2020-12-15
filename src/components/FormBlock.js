@@ -91,7 +91,7 @@ const [purchasePrice, setPurchasePrice] = useState(''),
       [principal, setPrincipal] = useState(0);
       
       
-  const setCalculation = async () => {
+  const setCalculation = () => {
   
       // В поле можно вводить только цифры
       const validatedPrice = validateField(purchasePrice, setPurchasePrice),
@@ -176,69 +176,69 @@ const [purchasePrice, setPurchasePrice] = useState(''),
   // Отображение на странице
   return(
   <Context.Provider value={{
-    // onChangeValue,
-    monthlyPayment,
-    requiredIncome,
-    overPayment,
-    principal,
-  }}>
-    <Container>
-      <h1>Ипотечный калькулятор</h1>
-      <form>
-        <InputSection>
-          <label>Стоимость недвижимости</label>
-          <ErrorBlock>{purchasePrice.error}</ErrorBlock>
-          <input 
-            onChange={(e) => {
-              const {value} = e.target;
-              e.target.value = addSpacesToValue(value);
-              setPurchasePrice(removeSpacesInValue(value));
+      // onChangeValue,
+      monthlyPayment,
+      requiredIncome,
+      overPayment,
+      principal,
+    }}>
+      <Container>
+        <h1>Ипотечный калькулятор</h1>
+        <form>
+          <InputSection>
+            <label>Стоимость недвижимости</label>
+            <ErrorBlock>{purchasePrice.error}</ErrorBlock>
+            <input 
+              onChange={(e) => {
+                const {value} = e.target;
+                e.target.value = addSpacesToValue(value);
+                setPurchasePrice(removeSpacesInValue(value));
+                }
               }
-            }
-            onKeyUp={() => setCalculation()}
-            style={{backgroundPosition: 'left 150% top 95%'}}
-            type='text' />
-        </InputSection>
-        <InputSection>
-          <label>Срок кредита</label>
-          <ErrorBlock>{loanTerm.error}</ErrorBlock>
-          <input 
-            onChange={(e) => setLoanTerm(e.target.value)}
-            onKeyUp={() => setCalculation()}
-            style={{backgroundPosition: 'left 120% top 5%'}}
-            type='text'/>
-        </InputSection>
-        <InputSection>
-          <label>
-            Первоначальный взнос
-          </label>
-          <ErrorBlock>{downPayment.error}</ErrorBlock>
-          <input
-            onChange={(e) => {
-              const {value} = e.target;
-              setDownPayment(removeSpacesInValue(value));
-              e.target.value = addSpacesToValue(value);
+              onKeyUp={() => setCalculation()}
+              style={{backgroundPosition: 'left 150% top 95%'}}
+              type='text' />
+          </InputSection>
+          <InputSection>
+            <label>Срок кредита</label>
+            <ErrorBlock>{loanTerm.error}</ErrorBlock>
+            <input 
+              onChange={(e) => setLoanTerm(e.target.value)}
+              onKeyUp={() => setCalculation()}
+              style={{backgroundPosition: 'left 120% top 5%'}}
+              type='text'/>
+          </InputSection>
+          <InputSection>
+            <label>
+              Первоначальный взнос
+            </label>
+            <ErrorBlock>{downPayment.error}</ErrorBlock>
+            <input
+              onChange={(e) => {
+                const {value} = e.target;
+                setDownPayment(removeSpacesInValue(value));
+                e.target.value = addSpacesToValue(value);
+                }
               }
-            }
-            onKeyUp={() => setCalculation()}
-            style={{backgroundPosition: 'left 150% top 95%'}}
-            type='text' />
-          <RadioButtonsBlock>
-          </RadioButtonsBlock>
-        </InputSection>
-        <InputSection>
-          <label>Процентная ставка</label>
-          <ErrorBlock>{loanApr.error}</ErrorBlock>
-          <input 
-            onChange={(e) => setLoanApr(e.target.value)}
-            onKeyUp={() => setCalculation()}
-            style={{backgroundPosition: 'left 150% top 50%'}}
-            type='text' />
-        </InputSection>
-      </form>
-      <ButtonsBlock />
-      <TotalBlock />
-    </Container>
+              onKeyUp={() => setCalculation()}
+              style={{backgroundPosition: 'left 150% top 95%'}}
+              type='text' />
+            <RadioButtonsBlock>
+            </RadioButtonsBlock>
+          </InputSection>
+          <InputSection>
+            <label>Процентная ставка</label>
+            <ErrorBlock>{loanApr.error}</ErrorBlock>
+            <input 
+              onChange={(e) => setLoanApr(e.target.value)}
+              onKeyUp={() => setCalculation()}
+              style={{backgroundPosition: 'left 150% top 50%'}}
+              type='text' />
+          </InputSection>
+        </form>
+        <ButtonsBlock />
+        <TotalBlock />
+      </Container>
     </Context.Provider>
   )
 }
