@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import numeral from 'numeral';
+import 'numeral/locales/ru';
 import styled from 'styled-components';
 import {Context} from '../services/context';
 
@@ -32,6 +33,7 @@ const OutputSection = styled.p`
 
 const TotalBlock = () => {
     const {monthlyPayment, requiredIncome, overPayment, principal} = useContext(Context); 
+    numeral.locale('ru');
     
     return (
       <Total>

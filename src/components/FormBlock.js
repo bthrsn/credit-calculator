@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
+// import numeral from 'numeral';
+// import 'numeral/locales/ru';
 import styled from 'styled-components';
 import spriteImg from '../assets/sprites.svg';
 import RadioButtonsBlock from './RadioButtonsBlock';
@@ -110,20 +112,20 @@ const [purchasePrice, setPurchasePrice] = useState(''),
       [downPayment, setDownPayment] = useState(''),
       [loanApr, setLoanApr] = useState(''),
       // Для корректного получения данных из localStorage, состояние берем также из localStorage
-      [monthlyPayment, setMonthlyPayment] = useState(localStorage.getItem('monthlyPayment')),
-      [requiredIncome, setRequiredIncome] = useState(localStorage.getItem('requiredIncome')),
-      [overPayment, setOverPayment] = useState(localStorage.getItem('overPayment')),
-      [principal, setPrincipal] = useState(localStorage.getItem('principal'));
+      [monthlyPayment, setMonthlyPayment] = useState(0),
+      [requiredIncome, setRequiredIncome] = useState(0),
+      [overPayment, setOverPayment] = useState(0),
+      [principal, setPrincipal] = useState(0);
       
 
       
   const setCalculation = async () => {
   
       // В поле можно вводить только цифры
-      const validatedPrice = await validateField(purchasePrice, setPurchasePrice),
-           validatedPayment = await validateField(loanTerm, setLoanTerm),
-           validatedLoanTerm = await validateField(downPayment, setDownPayment),
-           validatedLoanApr = await validateField(loanApr, setLoanApr);
+      const validatedPrice = validateField(purchasePrice, setPurchasePrice),
+           validatedPayment = validateField(loanTerm, setLoanTerm),
+           validatedLoanTerm = validateField(downPayment, setDownPayment),
+           validatedLoanApr = validateField(loanApr, setLoanApr);
        
       //  Условия расчета
       if (validatedPrice &&
@@ -143,6 +145,8 @@ const [purchasePrice, setPurchasePrice] = useState(''),
       // MI = I / 1200, где
       // MI - ежемесячная выплата процентов, I-процентная ставка,
       monthlyInterest = loanApr / 1200,
+      
+      // Срок кредитования в месяцах
       numberOfPayments = loanTerm * 12,
         
       // P = C * (MI + MI / ((1+ MI)^n - 1)), где
@@ -150,12 +154,12 @@ const [purchasePrice, setPurchasePrice] = useState(''),
       // n-срок кредитования (в месяцах)
       monthlyPayment = Math.round(principal * (monthlyInterest + monthlyInterest / (Math.pow(1 + monthlyInterest, numberOfPayments) - 1))),
         
-      // I = 5 * (P / 3), где 
-      // I-необходимый доход, P-ежемесячный платеж
-      overPayment = Math.round(monthlyPayment * numberOfPayments - purchasePrice + downPayment),
-        
       // L = P * n - W + A, где L-переплата, P-ежемесячный платеж,
       // n-срок кредитования, W-стоимость недвижимости, A-первоначальный взнос
+      overPayment = Math.round(monthlyPayment * numberOfPayments - purchasePrice + downPayment),
+      
+      // I = 5 * (P / 3), где 
+      // I-необходимый доход, P-ежемесячный платеж
       requiredIncome = Math.round(5 * (monthlyPayment / 3));
       
     setMonthlyPayment(monthlyPayment);
@@ -177,16 +181,16 @@ const [purchasePrice, setPurchasePrice] = useState(''),
     setDownPayment(downPayment);
   }
   
-  // Сохранение элементов в localStorage
-  useEffect(() => {localStorage.setItem('purchasePrice', JSON.stringify(purchasePrice))}, [purchasePrice])
-  useEffect(() => {localStorage.setItem('loanTerm', JSON.stringify(loanTerm))}, [loanTerm])
-  useEffect(() => {localStorage.setItem('downPayment', JSON.stringify(downPayment))}, [downPayment])
-  useEffect(() => {localStorage.setItem('loanApr', JSON.stringify(loanApr))}, [loanApr])
+  // // Сохранение элементов в localStorage
+  // useEffect(() => {localStorage.setItem('purchasePrice', JSON.stringify(purchasePrice))}, [purchasePrice])
+  // useEffect(() => {localStorage.setItem('loanTerm', JSON.stringify(loanTerm))}, [loanTerm])
+  // useEffect(() => {localStorage.setItem('downPayment', JSON.stringify(downPayment))}, [downPayment])
+  // useEffect(() => {localStorage.setItem('loanApr', JSON.stringify(loanApr))}, [loanApr])
 
-  useEffect(() => {localStorage.setItem('monthlyPayment', JSON.stringify(monthlyPayment))}, [monthlyPayment])
-  useEffect(() => {localStorage.setItem('requiredIncome', JSON.stringify(requiredIncome))}, [requiredIncome])
-  useEffect(() => {localStorage.setItem('overPayment', JSON.stringify(overPayment))}, [overPayment])
-  useEffect(() => {localStorage.setItem('principal', JSON.stringify(principal))}, [principal])
+  // useEffect(() => {localStorage.setItem('monthlyPayment', JSON.stringify(monthlyPayment))}, [monthlyPayment])
+  // useEffect(() => {localStorage.setItem('requiredIncome', JSON.stringify(requiredIncome))}, [requiredIncome])
+  // useEffect(() => {localStorage.setItem('overPayment', JSON.stringify(overPayment))}, [overPayment])
+  // useEffect(() => {localStorage.setItem('principal', JSON.stringify(principal))}, [principal])
 
   // Отображение на странице
   return(
