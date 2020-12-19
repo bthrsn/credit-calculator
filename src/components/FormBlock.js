@@ -73,11 +73,12 @@ const InputSection = styled.div`
     }
 `;
 
-const ErrorBlock = styled.span`
-  margin-bottom: .2rem;
-  font-weight: 500;
-  color: red;
-`;
+// const ErrorBlock = styled.span`
+//   margin-bottom: .2rem;
+//   font-weight: 500;
+//   color: red;
+// `;
+
 const FormBlock = () => {
 
   // Используем хук useState для хранения и изменения state
@@ -160,7 +161,7 @@ const FormBlock = () => {
   }
     
   // Очистка input
-  const clearData = (e) => {
+  const clearInput = (e) => {
     e.preventDefault();
     
     setPurchasePrice('');
@@ -172,7 +173,7 @@ const FormBlock = () => {
   }
     
   // Сохранение введеных данных в localStorage
-  const saveData = (e) => {
+  const saveInput = (e) => {
     e.preventDefault();
     
     localStorage.setItem('purchasePrice', JSON.stringify(purchasePrice));
@@ -180,12 +181,12 @@ const FormBlock = () => {
     localStorage.setItem('downPayment', JSON.stringify(downPayment));
     localStorage.setItem('loanApr', JSON.stringify(loanApr));
   }
-  
-  // // Сохранение элементов в localStorage
-  // useEffect(() => {localStorage.setItem('purchasePrice', JSON.stringify(purchasePrice))}, [purchasePrice])
-  // useEffect(() => {localStorage.setItem('loanTerm', JSON.stringify(loanTerm))}, [loanTerm])
-  // useEffect(() => {localStorage.setItem('downPayment', JSON.stringify(downPayment))}, [downPayment])
-  // useEffect(() => {localStorage.setItem('loanApr', JSON.stringify(loanApr))}, [loanApr])
+    
+  // Подстановка данных из localStorage в input
+  useEffect(() => {setPurchasePrice(JSON.parse(localStorage.getItem('purchasePrice')))}, []);
+  useEffect(() => {setLoanTerm(JSON.parse(localStorage.getItem('loanTerm')))}, []);
+  useEffect(() => {setDownPayment(JSON.parse(localStorage.getItem('downPayment')))}, []);
+  useEffect(() => {setLoanApr(JSON.parse(localStorage.getItem('loanApr')))}, []);
   
   // Переключение локали отображения чисел на русский язык
   numeral.locale('ru');
@@ -195,8 +196,8 @@ const FormBlock = () => {
   <Context.Provider value={{
       // checked,
       // setChecked,
-      clearData,
-      saveData,
+      clearInput,
+      saveInput,
       onChangeValue,
       monthlyPayment,
       requiredIncome,
@@ -208,7 +209,7 @@ const FormBlock = () => {
         <form>
           <InputSection>
             <label>Стоимость недвижимости</label>
-            <ErrorBlock>{purchasePrice.error}</ErrorBlock>
+            {/* <ErrorBlock>{purchasePrice.error}</ErrorBlock> */}
             <input 
               onChange={(e) => {
                 const {value} = e.target;
@@ -223,7 +224,7 @@ const FormBlock = () => {
           </InputSection>
           <InputSection>
             <label>Срок кредита</label>
-            <ErrorBlock>{loanTerm.error}</ErrorBlock>
+            {/* <ErrorBlock>{loanTerm.error}</ErrorBlock> */}
             <input 
               onChange={(e) => setLoanTerm(e.target.value)}
               onKeyUp={() => setCalculation()}
@@ -235,7 +236,7 @@ const FormBlock = () => {
             <label>
               Первоначальный взнос
             </label>
-            <ErrorBlock>{downPayment.error}</ErrorBlock>
+            {/* <ErrorBlock>{downPayment.error}</ErrorBlock> */}
             <input
               onChange={(e) => {
                 const {value} = e.target;
@@ -252,7 +253,7 @@ const FormBlock = () => {
           </InputSection>
           <InputSection>
             <label>Процентная ставка</label>
-            <ErrorBlock>{loanApr.error}</ErrorBlock>
+            {/* <ErrorBlock>{loanApr.error}</ErrorBlock> */}
             <input 
               onChange={(e) => setLoanApr(e.target.value)}
               onKeyUp={() => setCalculation()}
