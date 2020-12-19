@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import numeral from 'numeral';
 import 'numeral/locales/ru';
-import validateField from '../services/validateField';
+// import validateField from '../services/validateField';
 import {addSpacesToValue, removeSpacesInValue} from '../services/displayNumerals';
 import {Context} from '../services/context';
 
@@ -90,12 +90,11 @@ const FormBlock = () => {
         [requiredIncome, setRequiredIncome] = useState(0),
         [overPayment, setOverPayment] = useState(0),
         [principal, setPrincipal] = useState(0);
-        // // state для чекбоксов
-        // [checked, setChecked] = useState(false)
+        // [checked, setChecked] = useState(false);
       
    
    // Переключение значения в первоначальном взносе  по клику на radio button
-  useEffect(() => {calculateValues()}, [downPayment]);
+  useEffect(() => {setCalculation()}, [downPayment]);
   const onChangeValue = (e) => {
     // Убираем знак процента
     const value = (e.target.value).replace(/\D/g, ''),
@@ -105,31 +104,31 @@ const FormBlock = () => {
   }
   
   // // При вводе вручную якорь убирается
-  // useEffect(() => {removeChecked()}, [checked]);
+  // useEffect(() => {removeChecked()}, []);
   
   // const removeChecked = () => {
   //   setChecked(false);
   // }
 
-  // Функция для запуска расчетов после валидации
-  const setCalculation = () => {
+  // // Функция для запуска расчетов после валидации
+  // const setCalculation = () => {
   
-      // В поле можно вводить только цифры
-      const validatedPrice = validateField(purchasePrice, setPurchasePrice),
-           validatedPayment = validateField(loanTerm, setLoanTerm),
-           validatedLoanTerm = validateField(downPayment, setDownPayment),
-           validatedLoanApr = validateField(loanApr, setLoanApr);
+  //     // В поле можно вводить только цифры
+  //     const validatedPrice = validateField(purchasePrice, setPurchasePrice),
+  //          validatedPayment = validateField(loanTerm, setLoanTerm),
+  //          validatedLoanTerm = validateField(downPayment, setDownPayment),
+  //          validatedLoanApr = validateField(loanApr, setLoanApr);
        
-      //  Условия расчета
-      if (validatedPrice &&
-        validatedPayment &&
-        validatedLoanTerm &&
-        validatedLoanApr) {
-          calculateValues();
-        }
-  }
+  //     //  Условия расчета
+  //     if (validatedPrice &&
+  //       validatedPayment &&
+  //       validatedLoanTerm &&
+  //       validatedLoanApr) {
+  //         calculateValues();
+  //       }
+  // }
   
-  const calculateValues = () => {
+  const setCalculation = () => {
     // C = W - A, где
     // C-тело кредита, W-стоимость недвижимости, A-первоначальный взнос 
     let principal = purchasePrice - downPayment,
@@ -226,7 +225,12 @@ const FormBlock = () => {
             <label>Срок кредита</label>
             {/* <ErrorBlock>{loanTerm.error}</ErrorBlock> */}
             <input 
-              onChange={(e) => setLoanTerm(e.target.value)}
+              onChange={(e) => {
+                const {value} = e.target;
+                e.target.value = addSpacesToValue(value);
+                setLoanTerm(removeSpacesInValue(value));
+                }
+              }
               onKeyUp={() => setCalculation()}
               style={{backgroundPosition: 'left 120% top 5%'}}
               type='text'
@@ -245,7 +249,7 @@ const FormBlock = () => {
                 }
               }
               // onKeyUp={() => setCalculation()}
-              // onInput={() => removeChecked()}
+              // onKeyUp={() => removeChecked()}
               style={{backgroundPosition: 'left 150% top 95%'}}
               type='text' 
               value={addSpacesToValue(downPayment)} />
@@ -255,7 +259,12 @@ const FormBlock = () => {
             <label>Процентная ставка</label>
             {/* <ErrorBlock>{loanApr.error}</ErrorBlock> */}
             <input 
-              onChange={(e) => setLoanApr(e.target.value)}
+              onChange={(e) => {
+                const {value} = e.target;
+                e.target.value = addSpacesToValue(value);
+                setLoanApr(removeSpacesInValue(value));
+                }
+              }
               onKeyUp={() => setCalculation()}
               style={{backgroundPosition: 'left 150% top 50%'}}
               type='text' 

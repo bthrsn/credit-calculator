@@ -49,7 +49,7 @@ const RadioButtons = styled.div`
             value="10%" 
             name="down-payment" 
             // checked={checked} 
-            // onChange={() => setChecked(!checked)} 
+            // onChange={(e) => {e.target.value = setChecked(!checked)}} 
           />
           <span>10%</span>
         </label>
@@ -59,7 +59,7 @@ const RadioButtons = styled.div`
             value="15%" 
             name="down-payment"
             // checked={checked} 
-            // onChange={() => setChecked(!checked)} 
+            // onChange={(e) => {e.target.value = setChecked(!checked)}} 
           />
           <span>15%</span></label>
         <label>
