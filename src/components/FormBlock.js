@@ -88,9 +88,9 @@ const FormBlock = () => {
         [monthlyPayment, setMonthlyPayment] = useState(0),
         [requiredIncome, setRequiredIncome] = useState(0),
         [overPayment, setOverPayment] = useState(0),
-        [principal, setPrincipal] = useState(0),
-        // state для чекбоксов
-        [checked, setChecked] = useState(false)
+        [principal, setPrincipal] = useState(0);
+        // // state для чекбоксов
+        // [checked, setChecked] = useState(false)
       
    
    // Переключение значения в первоначальном взносе  по клику на radio button
@@ -106,9 +106,9 @@ const FormBlock = () => {
   // // При вводе вручную якорь убирается
   // useEffect(() => {removeChecked()}, [checked]);
   
-  const removeChecked = () => {
-    setChecked(false);
-  }
+  // const removeChecked = () => {
+  //   setChecked(false);
+  // }
 
   // Функция для запуска расчетов после валидации
   const setCalculation = () => {
@@ -196,8 +196,8 @@ const FormBlock = () => {
   // Отображение на странице
   return(
   <Context.Provider value={{
-      checked,
-      setChecked,
+      // checked,
+      // setChecked,
       clearInput,
       saveInput,
       onChangeValue,
@@ -246,7 +246,7 @@ const FormBlock = () => {
               }
               value={addSpacesToValue(downPayment)}
               // onKeyUp={() => setCalculation()}
-              onInput={() => removeChecked()}
+              // onInput={() => removeChecked()}
               style={{backgroundPosition: 'left 150% top 95%'}}
               type='text' />
             <RadioButtonsBlock />

@@ -36,7 +36,7 @@ const RadioButtons = styled.div`
 
  const RadioButtonsBlock  = () => {
  
- const {onChangeValue, setChecked, checked} = useContext(Context);
+ const {onChangeValue} = useContext(Context);
  
   return(
     <RadioButtons
@@ -48,8 +48,8 @@ const RadioButtons = styled.div`
             type="radio"
             value="10%" 
             name="down-payment" 
-            checked={checked} 
-            onChange={() => setChecked(!checked)} 
+            // checked={checked} 
+            // onChange={() => setChecked(!checked)} 
           />
           <span>10%</span>
         </label>
@@ -58,8 +58,8 @@ const RadioButtons = styled.div`
             type="radio" 
             value="15%" 
             name="down-payment"
-            checked={checked} 
-            onChange={() => setChecked(!checked)} 
+            // checked={checked} 
+            // onChange={() => setChecked(!checked)} 
           />
           <span>15%</span></label>
         <label>
