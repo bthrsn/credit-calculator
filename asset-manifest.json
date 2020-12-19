@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/credit-calculator/static/css/main.44e6ba9e.chunk.css",
+    "main.js": "/credit-calculator/static/js/main.802d46dd.chunk.js",
+    "main.js.map": "/credit-calculator/static/js/main.802d46dd.chunk.js.map",
+    "runtime-main.js": "/credit-calculator/static/js/runtime-main.815ff47a.js",
+    "runtime-main.js.map": "/credit-calculator/static/js/runtime-main.815ff47a.js.map",
+    "static/css/2.679831fc.chunk.css": "/credit-calculator/static/css/2.679831fc.chunk.css",
+    "static/js/2.93e46fae.chunk.js": "/credit-calculator/static/js/2.93e46fae.chunk.js",
+    "static/js/2.93e46fae.chunk.js.map": "/credit-calculator/static/js/2.93e46fae.chunk.js.map",
+    "index.html": "/credit-calculator/index.html",
+    "static/css/2.679831fc.chunk.css.map": "/credit-calculator/static/css/2.679831fc.chunk.css.map",
+    "static/css/main.44e6ba9e.chunk.css.map": "/credit-calculator/static/css/main.44e6ba9e.chunk.css.map",
+    "static/js/2.93e46fae.chunk.js.LICENSE.txt": "/credit-calculator/static/js/2.93e46fae.chunk.js.LICENSE.txt",
+    "static/media/background.91d26c5b.jpg": "/credit-calculator/static/media/background.91d26c5b.jpg",
+    "static/media/sprites.54b15d44.svg": "/credit-calculator/static/media/sprites.54b15d44.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.815ff47a.js",
+    "static/css/2.679831fc.chunk.css",
+    "static/js/2.93e46fae.chunk.js",
+    "static/css/main.44e6ba9e.chunk.css",
+    "static/js/main.802d46dd.chunk.js"
+  ]
+}
