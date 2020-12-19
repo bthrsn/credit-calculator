@@ -10,6 +10,7 @@ yarn.lock
 
 # testing
 /coverage
+debug.log
 
 # production
 /build

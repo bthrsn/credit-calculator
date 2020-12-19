@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import numeral from 'numeral';
 import 'numeral/locales/ru';
 import validateField from '../services/validateField';
+import {addSpacesToValue, removeSpacesInValue} from '../services/displayNumerals';
 import {Context} from '../services/context';
 
 import RadioButtonsBlock from './RadioButtonsBlock';
@@ -77,20 +78,39 @@ const ErrorBlock = styled.span`
   font-weight: 500;
   color: red;
 `;
+const FormBlock = () => {
 
-export default function FormBlock() {
+  // Используем хук useState для хранения и изменения state
+  const [purchasePrice, setPurchasePrice] = useState(''),
+        [loanTerm, setLoanTerm] = useState(''), 
+        [downPayment, setDownPayment] = useState(''),
+        [loanApr, setLoanApr] = useState(''),
+        [monthlyPayment, setMonthlyPayment] = useState(0),
+        [requiredIncome, setRequiredIncome] = useState(0),
+        [overPayment, setOverPayment] = useState(0),
+        [principal, setPrincipal] = useState(0),
+        // state для чекбоксов
+        [checked, setChecked] = useState(false)
+      
+   
+   // Переключение значения в первоначальном взносе  по клику на radio button
+  useEffect(() => {calculateValues()}, [downPayment]);
+  const onChangeValue = (e) => {
+    // Убираем знак процента
+    const value = (e.target.value).replace(/\D/g, ''),
+          downPayment = Math.round(purchasePrice * value / 100);
+          
+    setDownPayment(downPayment);
+  }
+  
+  // // При вводе вручную якорь убирается
+  // useEffect(() => {removeChecked()}, [checked]);
+  
+  const removeChecked = () => {
+    setChecked(false);
+  }
 
-// Расчеты
-const [purchasePrice, setPurchasePrice] = useState(''),
-      [loanTerm, setLoanTerm] = useState(''), 
-      [downPayment, setDownPayment] = useState(''),
-      [loanApr, setLoanApr] = useState(''),
-      [monthlyPayment, setMonthlyPayment] = useState(0),
-      [requiredIncome, setRequiredIncome] = useState(0),
-      [overPayment, setOverPayment] = useState(0),
-      [principal, setPrincipal] = useState(0);
-      
-      
+  // Функция для запуска расчетов после валидации
   const setCalculation = () => {
   
       // В поле можно вводить только цифры
@@ -108,9 +128,7 @@ const [purchasePrice, setPurchasePrice] = useState(''),
         }
   }
   
-
-  function  calculateValues() {
-    
+  const calculateValues = () => {
     // C = W - A, где
     // C-тело кредита, W-стоимость недвижимости, A-первоначальный взнос 
     let principal = purchasePrice - downPayment,
@@ -135,21 +153,31 @@ const [purchasePrice, setPurchasePrice] = useState(''),
       // I-необходимый доход, P-ежемесячный платеж
       requiredIncome = Math.round(5 * (monthlyPayment / 3));
       
-    setMonthlyPayment(monthlyPayment);
-    setRequiredIncome(requiredIncome);
-    setOverPayment(overPayment);
-    setPrincipal(principal);    
+    setMonthlyPayment(monthlyPayment)
+    setRequiredIncome(requiredIncome)
+    setOverPayment(overPayment)
+    setPrincipal(principal)    
   }
   
-  // // Переключение процентов в первоначальном взносе 
-  // const onChangeValue = (e) => {
+  // Сохранение ввода и расчетов в localStorage
   
-  //   console.log(e.target.value);
-  //   const target = e.target.value;
-  //   const downPayment = purchasePrice * target / 100;
+  // Очистка input
+  const clearInput = (e) => {
+    e.preventDefault();
+    console.log('Clear');
     
-  //   setDownPayment(downPayment);
-  // }
+    // setPurchasePrice(0);
+    // setLoanTerm(0);
+    // setDownPayment(0);
+    // setLoanApr(0);
+  }
+  
+  // Сохранение в localStorage
+  const saveInput = (e) => {
+    e.preventDefault();
+    console.log('Save');
+
+  }
   
   // // Сохранение элементов в localStorage
   // useEffect(() => {localStorage.setItem('purchasePrice', JSON.stringify(purchasePrice))}, [purchasePrice])
@@ -162,21 +190,17 @@ const [purchasePrice, setPurchasePrice] = useState(''),
   // useEffect(() => {localStorage.setItem('overPayment', JSON.stringify(overPayment))}, [overPayment])
   // useEffect(() => {localStorage.setItem('principal', JSON.stringify(principal))}, [principal])
   
-  // Переключение локали отображения чисел на русский язык и ф
+  // Переключение локали отображения чисел на русский язык
   numeral.locale('ru');
-  // Добавления пробелов между разрядами
-  const addSpacesToValue = (value) => {
-    return numeral(value).format('0,0');
-  }
-  // Удаление проблеов между разрядами для подсчета
-  const removeSpacesInValue = (value) => {
-    return value.replace(/\D/g, '');
-  }
 
   // Отображение на странице
   return(
   <Context.Provider value={{
-      // onChangeValue,
+      checked,
+      setChecked,
+      clearInput,
+      saveInput,
+      onChangeValue,
       monthlyPayment,
       requiredIncome,
       overPayment,
@@ -197,7 +221,7 @@ const [purchasePrice, setPurchasePrice] = useState(''),
               }
               onKeyUp={() => setCalculation()}
               style={{backgroundPosition: 'left 150% top 95%'}}
-              type='text' />
+              type='text'/>
           </InputSection>
           <InputSection>
             <label>Срок кредита</label>
@@ -220,11 +244,12 @@ const [purchasePrice, setPurchasePrice] = useState(''),
                 e.target.value = addSpacesToValue(value);
                 }
               }
-              onKeyUp={() => setCalculation()}
+              value={addSpacesToValue(downPayment)}
+              // onKeyUp={() => setCalculation()}
+              onInput={() => removeChecked()}
               style={{backgroundPosition: 'left 150% top 95%'}}
               type='text' />
-            <RadioButtonsBlock>
-            </RadioButtonsBlock>
+            <RadioButtonsBlock />
           </InputSection>
           <InputSection>
             <label>Процентная ставка</label>
@@ -243,4 +268,5 @@ const [purchasePrice, setPurchasePrice] = useState(''),
   )
 }
 
+export default FormBlock;
   

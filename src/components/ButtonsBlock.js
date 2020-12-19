@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {Context} from '../services/context';
+
 import styled from 'styled-components';
 
 const Buttons = styled.div`
@@ -37,22 +39,17 @@ const ClearButton = styled.button`
 
 const ButtonsBlock = () => {
 
-  // const saveData = (e) => {
-  //   e.preventDefault();
-  // }
-  
-  // const clearData = (e) => {
-  //   e.preventDefault();
-  // }
+  const {clearInput, saveInput} = useContext(Context);
+    
   return (
     <Buttons>
         <SaveButton
-          // onClick={saveData()}
+          onClick={(e) => saveInput(e)}
           >
             Save
           </SaveButton>
         <ClearButton
-          // onClick={clearData()}
+          onClick={(e) => clearInput(e)}
           >
             Clear
         </ClearButton>
