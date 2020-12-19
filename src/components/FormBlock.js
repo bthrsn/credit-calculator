@@ -158,25 +158,27 @@ const FormBlock = () => {
     setOverPayment(overPayment)
     setPrincipal(principal)    
   }
-  
-  // Сохранение ввода и расчетов в localStorage
-  
-  // Очистка input
-  const clearInput = (e) => {
-    e.preventDefault();
-    console.log('Clear');
     
-    // setPurchasePrice(0);
-    // setLoanTerm(0);
-    // setDownPayment(0);
-    // setLoanApr(0);
-  }
-  
-  // Сохранение в localStorage
-  const saveInput = (e) => {
+  // Очистка input
+  const clearData = (e) => {
     e.preventDefault();
-    console.log('Save');
-
+    
+    setPurchasePrice('');
+    setLoanTerm('');
+    setDownPayment('');
+    setLoanApr('');
+    
+    localStorage.clear();
+  }
+    
+  // Сохранение введеных данных в localStorage
+  const saveData = (e) => {
+    e.preventDefault();
+    
+    localStorage.setItem('purchasePrice', JSON.stringify(purchasePrice));
+    localStorage.setItem('loanTerm', JSON.stringify(loanTerm));
+    localStorage.setItem('downPayment', JSON.stringify(downPayment));
+    localStorage.setItem('loanApr', JSON.stringify(loanApr));
   }
   
   // // Сохранение элементов в localStorage
@@ -184,11 +186,6 @@ const FormBlock = () => {
   // useEffect(() => {localStorage.setItem('loanTerm', JSON.stringify(loanTerm))}, [loanTerm])
   // useEffect(() => {localStorage.setItem('downPayment', JSON.stringify(downPayment))}, [downPayment])
   // useEffect(() => {localStorage.setItem('loanApr', JSON.stringify(loanApr))}, [loanApr])
-
-  // useEffect(() => {localStorage.setItem('monthlyPayment', JSON.stringify(monthlyPayment))}, [monthlyPayment])
-  // useEffect(() => {localStorage.setItem('requiredIncome', JSON.stringify(requiredIncome))}, [requiredIncome])
-  // useEffect(() => {localStorage.setItem('overPayment', JSON.stringify(overPayment))}, [overPayment])
-  // useEffect(() => {localStorage.setItem('principal', JSON.stringify(principal))}, [principal])
   
   // Переключение локали отображения чисел на русский язык
   numeral.locale('ru');
@@ -198,8 +195,8 @@ const FormBlock = () => {
   <Context.Provider value={{
       // checked,
       // setChecked,
-      clearInput,
-      saveInput,
+      clearData,
+      saveData,
       onChangeValue,
       monthlyPayment,
       requiredIncome,
@@ -221,7 +218,8 @@ const FormBlock = () => {
               }
               onKeyUp={() => setCalculation()}
               style={{backgroundPosition: 'left 150% top 95%'}}
-              type='text'/>
+              type='text'
+              value={addSpacesToValue(purchasePrice)}/>
           </InputSection>
           <InputSection>
             <label>Срок кредита</label>
@@ -230,7 +228,8 @@ const FormBlock = () => {
               onChange={(e) => setLoanTerm(e.target.value)}
               onKeyUp={() => setCalculation()}
               style={{backgroundPosition: 'left 120% top 5%'}}
-              type='text'/>
+              type='text'
+              value={addSpacesToValue(loanTerm)} />
           </InputSection>
           <InputSection>
             <label>
@@ -244,11 +243,11 @@ const FormBlock = () => {
                 e.target.value = addSpacesToValue(value);
                 }
               }
-              value={addSpacesToValue(downPayment)}
               // onKeyUp={() => setCalculation()}
               // onInput={() => removeChecked()}
               style={{backgroundPosition: 'left 150% top 95%'}}
-              type='text' />
+              type='text' 
+              value={addSpacesToValue(downPayment)} />
             <RadioButtonsBlock />
           </InputSection>
           <InputSection>
@@ -258,7 +257,8 @@ const FormBlock = () => {
               onChange={(e) => setLoanApr(e.target.value)}
               onKeyUp={() => setCalculation()}
               style={{backgroundPosition: 'left 150% top 50%'}}
-              type='text' />
+              type='text' 
+              value={addSpacesToValue(loanApr)} />
           </InputSection>
         </form>
         <ButtonsBlock />

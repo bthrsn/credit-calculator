@@ -39,17 +39,17 @@ const ClearButton = styled.button`
 
 const ButtonsBlock = () => {
 
-  const {clearInput, saveInput} = useContext(Context);
+  const {clearData, saveData} = useContext(Context);
     
   return (
     <Buttons>
         <SaveButton
-          onClick={(e) => saveInput(e)}
+          onClick={(e) => saveData(e)}
           >
             Save
           </SaveButton>
         <ClearButton
-          onClick={(e) => clearInput(e)}
+          onClick={(e) => clearData(e)}
           >
             Clear
         </ClearButton>
