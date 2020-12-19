@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import numeral from 'numeral';
 import 'numeral/locales/ru';
-// import validateField from '../services/validateField';
 import {addSpacesToValue, removeSpacesInValue} from '../services/displayNumerals';
 import {Context} from '../services/context';
 
@@ -73,12 +72,6 @@ const InputSection = styled.div`
     }
 `;
 
-// const ErrorBlock = styled.span`
-//   margin-bottom: .2rem;
-//   font-weight: 500;
-//   color: red;
-// `;
-
 const FormBlock = () => {
 
   // Используем хук useState для хранения и изменения state
@@ -89,9 +82,7 @@ const FormBlock = () => {
         [monthlyPayment, setMonthlyPayment] = useState(0),
         [requiredIncome, setRequiredIncome] = useState(0),
         [overPayment, setOverPayment] = useState(0),
-        [principal, setPrincipal] = useState(0);
-        // [checked, setChecked] = useState(false);
-      
+        [principal, setPrincipal] = useState(0);      
    
    // Переключение значения в первоначальном взносе  по клику на radio button
   useEffect(() => {setCalculation()}, [downPayment]);
@@ -102,32 +93,7 @@ const FormBlock = () => {
           
     setDownPayment(downPayment);
   }
-  
-  // // При вводе вручную якорь убирается
-  // useEffect(() => {removeChecked()}, []);
-  
-  // const removeChecked = () => {
-  //   setChecked(false);
-  // }
-
-  // // Функция для запуска расчетов после валидации
-  // const setCalculation = () => {
-  
-  //     // В поле можно вводить только цифры
-  //     const validatedPrice = validateField(purchasePrice, setPurchasePrice),
-  //          validatedPayment = validateField(loanTerm, setLoanTerm),
-  //          validatedLoanTerm = validateField(downPayment, setDownPayment),
-  //          validatedLoanApr = validateField(loanApr, setLoanApr);
-       
-  //     //  Условия расчета
-  //     if (validatedPrice &&
-  //       validatedPayment &&
-  //       validatedLoanTerm &&
-  //       validatedLoanApr) {
-  //         calculateValues();
-  //       }
-  // }
-  
+    
   const setCalculation = () => {
     // C = W - A, где
     // C-тело кредита, W-стоимость недвижимости, A-первоначальный взнос 
@@ -193,8 +159,6 @@ const FormBlock = () => {
   // Отображение на странице
   return(
   <Context.Provider value={{
-      // checked,
-      // setChecked,
       clearInput,
       saveInput,
       onChangeValue,
@@ -208,7 +172,6 @@ const FormBlock = () => {
         <form>
           <InputSection>
             <label>Стоимость недвижимости</label>
-            {/* <ErrorBlock>{purchasePrice.error}</ErrorBlock> */}
             <input 
               onChange={(e) => {
                 const {value} = e.target;
@@ -223,7 +186,6 @@ const FormBlock = () => {
           </InputSection>
           <InputSection>
             <label>Срок кредита</label>
-            {/* <ErrorBlock>{loanTerm.error}</ErrorBlock> */}
             <input 
               onChange={(e) => {
                 const {value} = e.target;
@@ -240,7 +202,6 @@ const FormBlock = () => {
             <label>
               Первоначальный взнос
             </label>
-            {/* <ErrorBlock>{downPayment.error}</ErrorBlock> */}
             <input
               onChange={(e) => {
                 const {value} = e.target;
@@ -248,8 +209,6 @@ const FormBlock = () => {
                 e.target.value = addSpacesToValue(value);
                 }
               }
-              // onKeyUp={() => setCalculation()}
-              // onKeyUp={() => removeChecked()}
               style={{backgroundPosition: 'left 150% top 95%'}}
               type='text' 
               value={addSpacesToValue(downPayment)} />
@@ -257,7 +216,6 @@ const FormBlock = () => {
           </InputSection>
           <InputSection>
             <label>Процентная ставка</label>
-            {/* <ErrorBlock>{loanApr.error}</ErrorBlock> */}
             <input 
               onChange={(e) => {
                 const {value} = e.target;
