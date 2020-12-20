@@ -2,7 +2,7 @@ import numeral from 'numeral';
 
   // Добавления пробелов между разрядами
   const addSpacesToValue = (value) => {
-    if (value === 0 || value === null) {
+    if (value === '' || value === null) {
       return '';
     } else {
       return numeral(value).format('0,0');
