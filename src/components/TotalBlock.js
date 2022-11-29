@@ -13,7 +13,7 @@ const Total = styled.div`
   margin-top: 1rem;
   background: #ebebeb;
   border-radius: .5rem;
-  box-shadow: 0 0 1px 0 rgba(8, 11, 14, .06), 
+  box-shadow: 0 0 1px 0 rgba(8, 11, 14, .06),
     0 6px 6px -1px rgba(8, 11, 1, .1);
 `;
 
@@ -24,37 +24,37 @@ const OutputSection = styled.p`
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  
+
   span {
     font-size: 25px;
-    font-weight: 500; 
-  }  
+    font-weight: 500;
+  }
 `;
 
 const TotalBlock = () => {
-    const {monthlyPayment, requiredIncome, overPayment, principal} = useContext(Context); 
+    const {monthlyPayment, requiredIncome, overPayment, principal} = useContext(Context);
     numeral.locale('ru');
-    
+
     return (
       <Total>
         <OutputSection>
-          Ежемесячный платеж
-          <span>{numeral(monthlyPayment).format('0,0')} ₽</span>
+          Monthly Payment
+          <span>{numeral(monthlyPayment).format('0,0')} €</span>
         </OutputSection>
         <OutputSection>
-          Необходимый доход
-          <span>{numeral(requiredIncome).format('0,0')} ₽</span>
+          Required Income
+          <span>{numeral(requiredIncome).format('0,0')} €</span>
         </OutputSection>
         <OutputSection>
-          Переплата
-          <span>{numeral(overPayment).format('0,0')} ₽</span>
+          Overpayment
+          <span>{numeral(overPayment).format('0,0')} €</span>
         </OutputSection>
         <OutputSection>
-          Тело кредита
-          <span>{numeral(principal).format('0,0')} ₽</span>
+          Loan Amount
+          <span>{numeral(principal).format('0,0')} €</span>
         </OutputSection>
       </Total>
-    
+
     )
 }
 

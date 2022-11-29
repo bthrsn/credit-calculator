@@ -1,17 +1,15 @@
 import numeral from 'numeral';
 
-  // Добавления пробелов между разрядами
-  const addSpacesToValue = (value) => {
-    if (value === '' || value === null) {
+  const formatValueToString = (value, suffix) => {
+    if (value === '' || value === null || value === 0) {
       return '';
     } else {
-      return numeral(value).format('0,0');
+      return numeral(value).format('0,0') + suffix;
     }
   }
-  
-  // Удаление проблеов между разрядами для подсчета
-  const removeSpacesInValue = (value) => {
-    return value.replace(/\D/g, '');
+
+  const formatValueToNumber = (value) => {
+    return +value.replace(/\D/g, '');
   }
-  
-  export {addSpacesToValue, removeSpacesInValue}
+
+  export {formatValueToString, formatValueToNumber}
